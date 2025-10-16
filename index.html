@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Soul Map</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app" aria-live="polite">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="title-block">
+        <h1 id="title" class="heading">Soul Map</h1>
+        <p id="subtitle" class="subheading">Navigation of Life</p>
+      </div>
+      <div class="lang-toggle" role="group" aria-label="Language toggle">
+        <button id="lang-en" class="chip active" aria-pressed="true">English</button>
+        <button id="lang-vi" class="chip" aria-pressed="false">Việt</button>
+      </div>
+    </header>
+
+    <!-- Intro -->
+    <section id="intro" class="intro">
+      <p id="intro-text" class="intro-text">Are you ready to open your Soul Map?</p>
+      <div class="orb" aria-hidden="true"><div class="orb-glow"></div></div>
+    </section>
+
+    <!-- Form -->
+    <form id="form" class="form" novalidate>
+      <label for="full-name" id="label-full-name" class="label">Full Name</label>
+      <input id="full-name" class="input" type="text" maxlength="48" aria-required="true" aria-describedby="name-hint" placeholder="Your full name" />
+      <small id="name-hint" class="hint"></small>
+
+      <div class="dob-row" aria-describedby="dob-hint">
+        <div class="dob-col">
+          <label for="year" id="label-year" class="label">Year</label>
+          <select id="year" class="select" aria-required="true"></select>
+        </div>
+        <div class="dob-col">
+          <label for="month" id="label-month" class="label">Month</label>
+          <select id="month" class="select" aria-required="true"></select>
+        </div>
+        <div class="dob-col">
+          <label for="day" id="label-day" class="label">Day</label>
+          <select id="day" class="select" aria-required="true"></select>
+        </div>
+      </div>
+      <small id="dob-hint" class="hint"></small>
+
+      <button id="calculate" class="button primary" type="submit" aria-busy="false">Calculate</button>
+      <p class="footer-note">Powered by Dify + SiliconFlow</p>
+    </form>
+
+    <!-- Loading -->
+    <section id="loading" class="loading hidden" aria-busy="true" aria-label="Loading">
+      <div class="orb large" aria-hidden="true"><div class="orb-glow"></div></div>
+    </section>
+
+    <!-- Result -->
+    <section id="result" class="result-view hidden" aria-label="Results">
+      <!-- Hero image -->
+      <div class="image-card">
+        <img id="result-image" alt="Soul Map visual" />
+      </div>
+
+      <!-- Core number chips -->
+      <div class="chips-row" role="list">
+        <span id="chip-life" class="chip badge" role="listitem" aria-label="Life Path">Life Path</span>
+        <span id="chip-exp"  class="chip badge" role="listitem" aria-label="Expression">Expression</span>
+        <span id="chip-soul" class="chip badge" role="listitem" aria-label="Soul Urge">Soul Urge</span>
+        <span id="chip-pers" class="chip badge" role="listitem" aria-label="Personality">Personality</span>
+        <span id="chip-pyear" class="chip badge" role="listitem" aria-label="Personal Year">Personal Year</span>
+      </div>
+
+      <!-- Info blocks -->
+      <article class="info">
+        <h2 id="sec-share" class="section-title">Share</h2>
+        <p  id="text-caption" class="section-text"></p>
+        <p  id="text-share-text" class="section-text"></p>
+
+        <h2 id="sec-core" class="section-title">Your Core Meaning</h2>
+        <p  id="text-core" class="section-text"></p>
+
+        <h2 id="sec-strengths" class="section-title">Strengths</h2>
+        <ul id="list-strengths" class="section-list" aria-label="Strengths"></ul>
+
+        <h2 id="sec-challenges" class="section-title">Challenges</h2>
+        <ul id="list-challenges" class="section-list" aria-label="Challenges"></ul>
+
+        <h2 id="sec-mission" class="section-title">Life Mission</h2>
+        <p  id="text-mission" class="section-text"></p>
+
+        <h2 id="sec-pyear-advice" class="section-title">Personal Year Advice</h2>
+        <p  id="text-personal-year-advice" class="section-text"></p>
+      </article>
+
+      <div class="actions" role="group" aria-label="Actions">
+        <button id="share" class="button">Share</button>
+        <button id="download" class="button">Download</button>
+      </div>
+
+      <!-- Share Modal -->
+      <div id="share-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="share-title">
+        <div class="modal-card">
+          <h3 id="share-title" class="modal-title">Share to…</h3>
+          <div class="modal-actions">
+            <button id="share-system" class="button">System Share</button>
+            <button id="share-instagram" class="button">Instagram</button>
+            <button id="share-facebook" class="button">Facebook</button>
+            <button id="share-twitter" class="button">Twitter/X</button>
+            <button id="share-copy" class="button">Copy Link</button>
+          </div>
+          <div class="modal-footer">
+            <button id="share-close" class="button">Close</button>
+          </div>
+        </div>
+      </div>
+
+      <a href="#" id="try-again" class="try-again">Try again</a>
+    </section>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
