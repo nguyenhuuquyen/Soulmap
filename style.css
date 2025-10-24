@@ -49,13 +49,21 @@ body {
 .button[disabled] { opacity: 0.6; cursor: not-allowed; }
 .footer-note { text-align: center; color: var(--muted); opacity: 0.6; font-size: 12px; margin-top: 8px; }
 
-.loading { display:flex; align-items:center; justify-content:center; min-height: 180px; }
+.loading { display:flex; align-items:center; justify-content:center; min-height: 180px; flex-direction: column; gap: 8px; }
 .hidden { display: none; }
 
 .result-view { margin-top: 12px; }
 .image-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.18); border-radius: 24px; padding: 8px; overflow:hidden; }
 .image-card img { width: 100%; height: auto; aspect-ratio: 9 / 16; object-fit: cover; border-radius: 16px; display:block; }
-.chips-row { display:flex; flex-wrap:wrap; gap:8px; margin: 10px 0; }
+.chips-row { display:flex; gap:8px; flex-wrap:wrap; margin:12px 0 8px; }
+.chip-btn { padding:8px 12px; border-radius:999px; background:#1b2550; color:#e6ebff; border:1px solid #2a3570; cursor:pointer; }
+.detail-panel { position:fixed; inset:0; background:rgba(0,0,0,.5); display:flex; align-items:flex-end; }
+.detail-panel.hidden { display:none; }
+.detail-card { width:100%; max-height:80vh; overflow:auto; background:#0f1738; color:#e6ebff; border-radius:20px 20px 0 0; padding:16px 20px 28px; border:1px solid #283061; position:relative; }
+.detail-card .close { position:absolute; top:10px; right:12px; background:transparent; color:#9fb4ff; border:none; font-size:20px; }
+.kv { margin:14px 0; }
+.k { font-weight:600; color:#a8b6ff; margin-bottom:4px; }
+.v { line-height:1.6; }
 .info { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.18); border-radius: 16px; padding: 12px; }
 .section-title { font-family: 'Playfair Display', serif; margin: 10px 0 4px; }
 .section-text { color: var(--text); opacity: 0.9; }
@@ -69,3 +77,36 @@ body {
 .modal-title { margin: 4px 0 8px; }
 .modal-actions { display:flex; flex-direction: column; gap:8px; }
 .modal-footer { display:flex; justify-content: flex-end; margin-top: 10px; }
+
+/* Visit count hint spacing and style */
+#visit-count.hint {
+  margin-top: 6px;
+  display: block;
+  color: #fff;
+  text-align: center;
+}
+
+/* Increase spacing above Birthday label to avoid crowding with language selector */
+#label-birthday.label {
+  margin-top: 16px;
+  display: block;
+}
+
+/* Strengthen overlay to reduce background bleed-through */
+.detail-panel {
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  z-index: 999;
+}
+
+/* Improve contrast and separation for the bottom sheet card */
+.detail-card {
+  background: #0f1738; /* keep opaque for readability */
+  box-shadow: 0 -12px 24px rgba(0, 0, 0, 0.4);
+}
+
+/* Optional: center footer notes in loading */
+.loading .footer-note {
+  text-align: center;
+}

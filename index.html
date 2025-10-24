@@ -15,10 +15,7 @@
         <h1 id="title" class="heading">Soul Map</h1>
         <p id="subtitle" class="subheading">Navigation of Life</p>
       </div>
-      <div class="lang-toggle" role="group" aria-label="Language toggle">
-        <button id="lang-en" class="chip active" aria-pressed="true">English</button>
-        <button id="lang-vi" class="chip" aria-pressed="false">Việt</button>
-      </div>
+      <!-- Language selection moved into form as flexible input -->
     </header>
 
     <!-- Intro -->
@@ -33,6 +30,20 @@
       <input id="full-name" class="input" type="text" maxlength="48" aria-required="true" aria-describedby="name-hint" placeholder="Your full name" />
       <small id="name-hint" class="hint"></small>
 
+      <label for="lang" id="label-lang" class="label">Language</label>
+      <select id="lang" class="select">
+        <option value="en">English</option>
+        <option value="zh">Chinese</option>
+        <option value="vi">Vietnamese</option>
+        <option value="fr">French</option>
+        <option value="es">Spanish</option>
+        <option value="ja">Japanese</option>
+        <option value="ko">Korean</option>
+        <option value="de">German</option>
+        <option value="ru">Russian</option>
+      </select>
+
+      <label id="label-birthday" class="label">Birthday</label>
       <div class="dob-row" aria-describedby="dob-hint">
         <div class="dob-col">
           <label for="year" id="label-year" class="label">Year</label>
@@ -49,13 +60,18 @@
       </div>
       <small id="dob-hint" class="hint"></small>
 
-      <button id="calculate" class="button primary" type="submit" aria-busy="false">Calculate</button>
-      <p class="footer-note">Powered by Dify + SiliconFlow</p>
+      <button id="calculate" class="button primary" type="submit">Calculate</button>
+      <!-- Replace privacy small with footer tone -->
+      <p class="footer-note">Inspired by the timeless wisdom of Pythagoras.</p>
+      <p class="footer-note">We do not store your data.</p>
+      <small id="visit-count" class="hint"></small>
     </form>
 
     <!-- Loading -->
     <section id="loading" class="loading hidden" aria-busy="true" aria-label="Loading">
       <div class="orb large" aria-hidden="true"><div class="orb-glow"></div></div>
+      <p class="footer-note">Inspired by the timeless wisdom of Pythagoras.</p>
+      <p class="footer-note">We do not store your data.</p>
     </section>
 
     <!-- Result -->
@@ -65,13 +81,29 @@
         <img id="result-image" alt="Soul Map visual" />
       </div>
 
-      <!-- Core number chips -->
-      <div class="chips-row" role="list">
-        <span id="chip-life" class="chip badge" role="listitem" aria-label="Life Path">Life Path</span>
-        <span id="chip-exp"  class="chip badge" role="listitem" aria-label="Expression">Expression</span>
-        <span id="chip-soul" class="chip badge" role="listitem" aria-label="Soul Urge">Soul Urge</span>
-        <span id="chip-pers" class="chip badge" role="listitem" aria-label="Personality">Personality</span>
-        <span id="chip-pyear" class="chip badge" role="listitem" aria-label="Personal Year">Personal Year</span>
+      <!-- Name + Caption removed per request -->
+
+      <!-- dải chip nút -->
+      <div id="core-chips" class="chips-row"></div>
+
+      <!-- panel chi tiết (drawer/modal) -->
+      <div id="core-detail-panel" class="detail-panel hidden" role="dialog" aria-modal="true" aria-labelledby="core-detail-title">
+        <div class="detail-card">
+          <button class="close" id="detail-close" aria-label="Close">✕</button>
+          <h3 id="core-detail-title"></h3>
+          <div class="kv">
+            <div class="k">Calculation method</div>
+            <div class="v" id="detail-method"></div>
+          </div>
+          <div class="kv">
+            <div class="k">Meaning</div>
+            <div class="v" id="detail-general"></div>
+          </div>
+          <div class="kv">
+            <div class="k">Personal meaning</div>
+            <div class="v" id="detail-personal"></div>
+          </div>
+        </div>
       </div>
 
       <!-- Info blocks -->
@@ -83,17 +115,19 @@
         <h2 id="sec-core" class="section-title">Your Core Meaning</h2>
         <p  id="text-core" class="section-text"></p>
 
+        <!-- Move Life Mission and Personal Year up -->
+        <h2 id="sec-mission" class="section-title">Life Mission</h2>
+        <p id="text-mission" class="section-text"></p>
+
+        <h2 id="sec-personal-year" class="section-title">Personal Year</h2>
+        <p id="text-personal-year-advice" class="section-text"></p>
+
+        <!-- Place Strengths and Challenges below -->
         <h2 id="sec-strengths" class="section-title">Strengths</h2>
         <ul id="list-strengths" class="section-list" aria-label="Strengths"></ul>
 
         <h2 id="sec-challenges" class="section-title">Challenges</h2>
         <ul id="list-challenges" class="section-list" aria-label="Challenges"></ul>
-
-        <h2 id="sec-mission" class="section-title">Life Mission</h2>
-        <p  id="text-mission" class="section-text"></p>
-
-        <h2 id="sec-pyear-advice" class="section-title">Personal Year Advice</h2>
-        <p  id="text-personal-year-advice" class="section-text"></p>
       </article>
 
       <div class="actions" role="group" aria-label="Actions">
