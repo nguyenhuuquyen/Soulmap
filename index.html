@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Soul Map</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Cormorant+Garamond:wght@600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -131,26 +131,29 @@
       </article>
 
       <div class="actions" role="group" aria-label="Actions">
-        <button id="share" class="button">Share</button>
-        <button id="download" class="button">Download</button>
+        <p class="download-note">Download & share your journey with someone who matters.</p>
+        <button id="download" class="button download-btn">share</button>
       </div>
 
-      <!-- Share Modal -->
-      <div id="share-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="share-title">
-        <div class="modal-card">
-          <h3 id="share-title" class="modal-title">Share to…</h3>
-          <div class="modal-actions">
-            <button id="share-system" class="button">System Share</button>
-            <button id="share-instagram" class="button">Instagram</button>
-            <button id="share-facebook" class="button">Facebook</button>
-            <button id="share-twitter" class="button">Twitter/X</button>
-            <button id="share-copy" class="button">Copy Link</button>
-          </div>
-          <div class="modal-footer">
-            <button id="share-close" class="button">Close</button>
+      <!-- Chat Box -->
+      <section id="chat-box" class="chat-box hidden" aria-label="Hỏi Soul Coach">
+        <div class="chat-hero">
+          <div class="coach-avatar"><div class="galaxy-orb"></div></div>
+          <div class="hero-text">
+            <h2 id="chat-title" class="chat-hero-title">Ask Soul Coach ✨</h2>
+            <p class="chat-subtitle">Chat with your Soul Map</p>
           </div>
         </div>
-      </div>
+        <div id="chat-chips" class="chips-row" aria-label="Câu hỏi gợi ý"></div>
+        <div id="chat-messages" class="chat-messages" aria-live="polite"></div>
+        <div class="chat-input-row">
+          <input id="chat-input" class="input" type="text" placeholder="Hãy hỏi Soul Map về con số 3, sứ mệnh 11, hay điều bạn đang tìm kiếm..." />
+          <button id="chat-voice" class="icon-btn" type="button" aria-label="Voice"><span>🎤</span></button>
+          <button id="chat-send" class="button magic">Send</button>
+        </div>
+      </section>
+
+      <!-- Share Modal removed -->
 
       <a href="#" id="try-again" class="try-again">Try again</a>
     </section>
