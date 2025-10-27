@@ -20,7 +20,9 @@ Live Demo
 
 📱 Responsive & Elegant UI – A minimal cosmic aesthetic using Tailwind + custom CSS for smooth performance across devices.
 
+
 🧰 Tech Stack / Core Tools
+
 Frontend          :	HTML5, CSS3, JavaScript (Vanilla)
 
 Styling           :Framework	Tailwind CSS + Custom Gradient & Glow Animations
@@ -39,6 +41,9 @@ Inspiration Source:Pythagorean Numerology & Human Design Philosophy
 🪶 Author
 
 Nguyen Huu Quyen (Quyen Javi)
+
 AI + Innovation Design | Tsinghua SIGS
+
 📧 Email :quyennguyen.dn.vn@gmail.com
+
 🌐 Wechat:quyenjavi
