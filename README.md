@@ -1,12 +1,14 @@
-Brief Introduction
+**Brief Introduction**
 
 Soul Map is an AI-powered numerology experience that transforms your name and birth date into a beautifully designed, personalized “map of the soul.”
 It bridges ancient Pythagorean wisdom with modern generative AI — turning numbers into insight, guidance, and visual storytelling.
 
-Live Demo
+
+**Live Demo**
+
 🔗 https://soulmap.zeabur.app
 
-✨ Key Features
+**✨ Key Features**
 
 🧠 AI Numerology Analysis – Calculates your Life Path, Expression, Soul Urge, Personality, and Maturity numbers using the Pythagorean system.
 
@@ -21,7 +23,7 @@ Live Demo
 📱 Responsive & Elegant UI – A minimal cosmic aesthetic using Tailwind + custom CSS for smooth performance across devices.
 
 
-🧰 Tech Stack / Core Tools
+**🧰 Tech Stack / Core Tools**
 
 Frontend          :	HTML5, CSS3, JavaScript (Vanilla)
 
@@ -38,9 +40,9 @@ Deployment    	  :Zeabur (Static Hosting + HTTPS + CDN)
 Inspiration Source:Pythagorean Numerology & Human Design Philosophy
 
 
-🪶 Author
+**🪶 Author**
 
-Nguyen Huu Quyen (Quyen Javi)
+**Nguyen Huu Quyen (Quyen Javi)**
 
 AI + Innovation Design | Tsinghua SIGS
 
