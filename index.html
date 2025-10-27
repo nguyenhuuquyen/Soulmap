@@ -4,28 +4,28 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Soul Map</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Cormorant+Garamond:wght@600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="image/favicon.jpg" type="image/jpeg" />
 </head>
 <body>
   <div class="app" aria-live="polite">
     <!-- Header -->
-    <header class="app-header">
+    <header class="app-header" role="banner">
       <div class="title-block">
         <h1 id="title" class="heading">Soul Map</h1>
         <p id="subtitle" class="subheading">Navigation of Life</p>
       </div>
-      <!-- Language selection moved into form as flexible input -->
     </header>
 
     <!-- Intro -->
-    <section id="intro" class="intro">
+    <section id="intro" class="intro" aria-label="Intro">
       <p id="intro-text" class="intro-text">Are you ready to open your Soul Map?</p>
       <div class="orb" aria-hidden="true"><div class="orb-glow"></div></div>
     </section>
 
-    <!-- Form -->
-    <form id="form" class="form" novalidate>
+    <!-- Screen 1: Form -->
+    <form id="form" class="form" novalidate aria-label="User inputs">
       <label for="full-name" id="label-full-name" class="label">Full Name</label>
       <input id="full-name" class="input" type="text" maxlength="48" aria-required="true" aria-describedby="name-hint" placeholder="Your full name" />
       <small id="name-hint" class="hint"></small>
@@ -61,32 +61,60 @@
       <small id="dob-hint" class="hint"></small>
 
       <button id="calculate" class="button primary" type="submit">Calculate</button>
-      <!-- Replace privacy small with footer tone -->
+
       <p class="footer-note">Inspired by the timeless wisdom of Pythagoras.</p>
       <p class="footer-note">We do not store your data.</p>
       <small id="visit-count" class="hint"></small>
     </form>
 
-    <!-- Loading -->
+    <!-- Screen 2: Loading -->
     <section id="loading" class="loading hidden" aria-busy="true" aria-label="Loading">
       <div class="orb large" aria-hidden="true"><div class="orb-glow"></div></div>
+      <p id="loading-quote" class="loading-quote"></p>
       <p class="footer-note">Inspired by the timeless wisdom of Pythagoras.</p>
       <p class="footer-note">We do not store your data.</p>
     </section>
 
-    <!-- Result -->
+    <!-- Screen 3: Result -->
     <section id="result" class="result-view hidden" aria-label="Results">
-      <!-- Hero image -->
+      <!-- Hero image card with overlay layer for download -->
       <div class="image-card">
+        <!-- Background image (from model) -->
         <img id="result-image" alt="Soul Map visual" />
+        <!-- Overlay layer (only used when clicking Share/Download) -->
+        <div id="dl-overlay" class="dl-overlay hidden" aria-hidden="true">
+          <!-- fixed brand row (inside frame) -->
+          <div class="dl-topbar">
+            <div class="dl-left">
+              <div id="qr-slot" class="qr-slot" aria-label="QR code area"></div>
+              <span id="qr-caption" class="qr-caption">Scan to reveal yours</span>
+            </div>
+            <div class="dl-right">
+              <span class="brand-soulmap" aria-label="SoulMap logo text">SoulMap</span>
+              <span class="brand-slogan">Inspired by the timeless wisdom of Pythagoras.</span>
+            </div>
+          </div>
+          <!-- translucent text panel (bottom) -->
+          <div id="dl-textpanel" class="dl-textpanel">
+            <h3 id="dl-name" class="dl-name"></h3>
+            <p id="dl-tagline" class="dl-tagline"></p>
+
+            <h4 class="dl-h">Your Core Meaning</h4>
+            <p id="dl-core" class="dl-p"></p>
+
+            <h4 class="dl-h">Life Mission</h4>
+            <p id="dl-mission" class="dl-p"></p>
+
+            <h4 class="dl-h">Personal Year</h4>
+            <p id="dl-year" class="dl-p"></p>
+          </div>
+        </div>
       </div>
 
-      <!-- Name + Caption removed per request -->
+      <!-- dynamic chips for core numbers -->
+      <div id="core-chips" class="chips-row" role="list" aria-label="Core numbers"></div>
 
-      <!-- dải chip nút -->
-      <div id="core-chips" class="chips-row"></div>
-
-      <!-- panel chi tiết (drawer/modal) -->
+      <!-- modal panel for a core detail -->
       <div id="core-detail-panel" class="detail-panel hidden" role="dialog" aria-modal="true" aria-labelledby="core-detail-title">
         <div class="detail-card">
           <button class="close" id="detail-close" aria-label="Close">✕</button>
@@ -115,14 +143,12 @@
         <h2 id="sec-core" class="section-title">Your Core Meaning</h2>
         <p  id="text-core" class="section-text"></p>
 
-        <!-- Move Life Mission and Personal Year up -->
         <h2 id="sec-mission" class="section-title">Life Mission</h2>
         <p id="text-mission" class="section-text"></p>
 
         <h2 id="sec-personal-year" class="section-title">Personal Year</h2>
         <p id="text-personal-year-advice" class="section-text"></p>
 
-        <!-- Place Strengths and Challenges below -->
         <h2 id="sec-strengths" class="section-title">Strengths</h2>
         <ul id="list-strengths" class="section-list" aria-label="Strengths"></ul>
 
@@ -132,11 +158,11 @@
 
       <div class="actions" role="group" aria-label="Actions">
         <p class="download-note">Download & share your journey with someone who matters.</p>
-        <button id="download" class="button download-btn">share</button>
+        <button id="download" class="button download-btn">Share</button>
       </div>
 
       <!-- Chat Box -->
-      <section id="chat-box" class="chat-box hidden" aria-label="Hỏi Soul Coach">
+      <section id="chat-box" class="chat-box hidden" aria-label="Ask Soul Coach">
         <div class="chat-hero">
           <div class="coach-avatar"><div class="galaxy-orb"></div></div>
           <div class="hero-text">
@@ -144,16 +170,14 @@
             <p class="chat-subtitle">Chat with your Soul Map</p>
           </div>
         </div>
-        <div id="chat-chips" class="chips-row" aria-label="Câu hỏi gợi ý"></div>
+        <div id="chat-chips" class="chips-row" aria-label="Suggested questions"></div>
         <div id="chat-messages" class="chat-messages" aria-live="polite"></div>
         <div class="chat-input-row">
-          <input id="chat-input" class="input" type="text" placeholder="Hãy hỏi Soul Map về con số 3, sứ mệnh 11, hay điều bạn đang tìm kiếm..." />
+          <input id="chat-input" class="input" type="text" placeholder="Ask Soul Map about your core numbers, life mission, or anything you seek…" />
           <button id="chat-voice" class="icon-btn" type="button" aria-label="Voice"><span>🎤</span></button>
           <button id="chat-send" class="button magic">Send</button>
         </div>
       </section>
-
-      <!-- Share Modal removed -->
 
       <a href="#" id="try-again" class="try-again">Try again</a>
     </section>

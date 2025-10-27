@@ -58,6 +58,33 @@ const shareClose     = el('share-close');
 let currentLang = 'en';
 let lastState   = { core:null, interpretation:null, imageUrl:'', share:{}, personalYear: undefined, personalYearAdvice: '', fullName: '' };
 
+/* ========== Loading Quotes ========== */
+const LOADING_QUOTES = [
+  "Numbers are the language of the soul — a quiet geometry that reveals why we are here.",
+  "Pythagoras believed that each number carries a vibration — a silent rhythm that connects the stars, the mind, and the human heart.",
+  "While your chart is being calculated, remember: every number has a story, and every story begins with self-discovery.",
+  "The harmony of the universe is found in the rhythm of numbers. Let’s listen to what yours will say.",
+  "Even Pythagoras said: learn the numbers, and you will learn yourself."
+];
+const loadingQuoteEl = document.getElementById('loading-quote');
+let _loadingQuoteTimer = null;
+function startLoadingQuotes(){
+  if (!loadingQuoteEl) return;
+  let i = 0;
+  loadingQuoteEl.textContent = LOADING_QUOTES[i % LOADING_QUOTES.length];
+  _loadingQuoteTimer = setInterval(()=>{
+    i++;
+    loadingQuoteEl.textContent = LOADING_QUOTES[i % LOADING_QUOTES.length];
+  }, 9000);
+}
+function stopLoadingQuotes(){
+  if (_loadingQuoteTimer){
+    clearInterval(_loadingQuoteTimer);
+    _loadingQuoteTimer = null;
+  }
+  if (loadingQuoteEl) loadingQuoteEl.textContent = '';
+}
+
 /* ========== INIT selects (YYYY/MM/DD) ========== */
 (function initDateSelectors(){
   const now = new Date();
@@ -143,8 +170,14 @@ function hide(sec){ sec.classList.add('hidden'); }
 function setBusy(b){
   btnCalc.disabled = b;
   btnCalc.setAttribute('aria-busy', b? 'true':'false');
-  if (b){ hide(introSec); show(loadingSec); hide(resultSec); }
+  if (b){
+    hide(introSec);
+    hide(form); // ẩn phần input khi bắt đầu tính toán
+    show(loadingSec);
+    hide(resultSec);
+  }
   else  { hide(loadingSec); }
+  if (b) startLoadingQuotes(); else stopLoadingQuotes();
 }
 
 function li(text){
@@ -269,7 +302,7 @@ function renderCoreChips(core, core_details, lang='en', personalYear, personalYe
     if (item.value == null) return;
     const d = core_details?.[item.key] || {};
     const btn = document.createElement('button');
-    btn.className = 'chip-btn';
+    btn.className = 'chip';
     btn.type = 'button';
     btn.textContent = `${d.label || item.label}: ${item.value}`;
 
@@ -400,6 +433,7 @@ function render({ core, interpretation, imageUrl, share, personalYear, personalY
     const suggested = Array.isArray(chatPrompts)
       ? chatPrompts
       : (chatPrompts?.suggested_questions || []);
+    // Chỉ hiển thị 5 chip mới từ kết quả và giữ cố định
     renderFixedChips(suggested);
     renderChatHook({ chatPrompts, fullName, lang, core });
   }
@@ -491,7 +525,9 @@ form.addEventListener('submit', async (e)=>{
 /* ========== Try again ========== */
 tryAgain.addEventListener('click', (e)=>{
   e.preventDefault();
-  hide(resultSec); show(introSec);
+  hide(resultSec);
+  show(introSec);
+  show(form); // hiện lại phần input khi bấm Retry
   window.scrollTo({top:0, behavior:'smooth'});
 });
 
@@ -759,28 +795,28 @@ async function composeSoulMapImage({
   ctx.fillStyle = 'white';
 
   // Name
-  ctx.font = "700 52px 'Playfair Display'";
+  ctx.font = "700 52px 'Playfair Display', Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif";
   h += 52 + 8;
   // Caption under name
-  ctx.font = '400 26px Inter';
+  ctx.font = '400 26px Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif';
   h += measureWrapHeightLang(ctx, caption, textMaxW, 36, lang) + 16;
 
   // Section 1
-  ctx.font = "700 40px 'Playfair Display'";
+  ctx.font = "700 40px 'Playfair Display', Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif";
   h += 40 + 18;
-  ctx.font = '400 28px Inter';
+  ctx.font = '400 28px Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif';
   h += measureWrapHeightLang(ctx, yourCore, textMaxW, 38, lang) + 18;
 
   // Section 2
-  ctx.font = "700 36px 'Playfair Display'";
+  ctx.font = "700 36px 'Playfair Display', Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif";
   h += 36 + 14;
-  ctx.font = '400 28px Inter';
+  ctx.font = '400 28px Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif';
   h += measureWrapHeightLang(ctx, mission, textMaxW, 38, lang) + 16;
 
   // Section 3
-  ctx.font = "700 36px 'Playfair Display'";
+  ctx.font = "700 36px 'Playfair Display', Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif";
   h += 36 + 14;
-  ctx.font = '400 28px Inter';
+  ctx.font = '400 28px Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif';
   h += measureWrapHeightLang(ctx, advice, textMaxW, 38, lang) + panelPadY;
 
   const panelH = Math.min(h, H * 0.35); // cap height to avoid covering too much
@@ -818,40 +854,40 @@ async function composeSoulMapImage({
   // Name
   ctx.textAlign = 'center';
   ctx.fillStyle = 'rgba(255,255,255,0.96)';
-  ctx.font = "700 52px 'Playfair Display'";
+  ctx.font = "700 52px 'Playfair Display', Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif";
   ctx.fillText(name, W / 2, y);
   y += 52 + 8;
 
   // Caption
-  ctx.font = '400 26px Inter';
+  ctx.font = '400 26px Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif';
   ctx.fillStyle = 'rgba(255,255,255,0.88)';
   y = wrapTextLang(ctx, caption, W / 2, y, textMaxW, 36, lang) + 16;
 
   // Core meaning
-  ctx.font = "700 40px 'Playfair Display'";
+  ctx.font = "700 40px 'Playfair Display', Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif";
   ctx.fillStyle = 'rgba(255,255,255,0.96)';
   ctx.fillText(lang === 'vi' ? 'Your Core Meaning' : 'Your Core Meaning', W / 2, y);
   y += 40 + 18;
-  ctx.font = '400 28px Inter';
+  ctx.font = '400 28px Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif';
   ctx.fillStyle = 'rgba(255,255,255,0.92)';
   y = wrapTextLang(ctx, yourCore, W / 2, y, textMaxW, 38, lang) + 18;
 
   // Life Mission
-  ctx.font = "700 36px 'Playfair Display'";
+  ctx.font = "700 36px 'Playfair Display', Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif";
   ctx.fillStyle = 'rgba(255,255,255,0.96)';
   ctx.fillText(lang === 'vi' ? 'Life Mission' : 'Life Mission', W / 2, y);
   y += 36 + 14;
-  ctx.font = '400 28px Inter';
+  ctx.font = '400 28px Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif';
   ctx.fillStyle = 'rgba(255,255,255,0.92)';
   y = wrapTextLang(ctx, mission, W / 2, y, textMaxW, 38, lang) + 16;
 
   // Personal Year (only render if advice exists)
   if (advice && advice.trim()) {
-    ctx.font = "700 36px 'Playfair Display'";
+    ctx.font = "700 36px 'Playfair Display', Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif";
     ctx.fillStyle = 'rgba(255,255,255,0.96)';
     ctx.fillText(lang === 'vi' ? 'Personal Year' : 'Personal Year', W / 2, y);
     y += 36 + 14;
-    ctx.font = '400 28px Inter';
+    ctx.font = '400 28px Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif';
     ctx.fillStyle = 'rgba(255,255,255,0.92)';
     y = wrapTextLang(ctx, advice, W / 2, y, textMaxW, 38, lang);
   }
@@ -872,7 +908,7 @@ async function composeSoulMapImage({
     // caption (optional)
     ctx.textAlign = 'left';
     ctx.textBaseline = 'top';
-    ctx.font = '300 14px Inter';
+    ctx.font = '300 14px Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif';
     ctx.fillStyle = 'rgba(232,215,164,0.85)'; // #E8D7A4 at 0.85 opacity
     ctx.fillText('Scan to reveal yours', qrX, qrY + qrSize + 8);
   } catch {}
@@ -909,6 +945,33 @@ const chatSend = document.getElementById('chat-send');
 const chatMessages = document.getElementById('chat-messages');
 const askCoachBtn = document.getElementById('ask-coach');
 
+// Reset toàn bộ chat khi bắt đầu Calculate
+function resetChatForCalculation(){
+  try {
+    // Xóa toàn bộ nội dung chat
+    if (chatMessages) chatMessages.innerHTML = '';
+    // Xóa nội dung ô nhập
+    if (chatInput) chatInput.value = '';
+    // Xóa tất cả chips (bao gồm cả cố định); sẽ render lại sau khi có kết quả
+    if (chatChips) chatChips.querySelectorAll('.topic-chip').forEach(el => el.remove());
+    // Reset hội thoại
+    if (typeof coachState !== 'undefined') {
+      coachState.conversationId = null;
+      coachState.memory.pending_action = null;
+      coachState.memory.last_question_id = null;
+    }
+    try { sessionStorage.removeItem('soul_convo'); } catch {}
+    try { localStorage.removeItem('soul_coach_convo'); } catch {}
+    try {
+      const uid = sessionStorage.getItem('soul_user') || getOrCreateUserId();
+      const flagKey = 'soulmap_init_' + uid;
+      localStorage.removeItem(flagKey);
+    } catch {}
+  } catch (e) {
+    console.error('resetChatForCalculation error', e);
+  }
+}
+
 function getUserId() {
   const KEY = 'soulmap_uid';
   let uid = localStorage.getItem(KEY);
@@ -939,7 +1002,7 @@ const CHIP_INTENTS = [
 function createChip({ text, onClick }){
   if (!chatChips) return;
   const btn = document.createElement('button');
-  btn.className = 'topic-chip fixed';
+  btn.className = 'chip-btn';
   btn.type = 'button';
   btn.textContent = text;
   btn.addEventListener('click', onClick);
@@ -948,16 +1011,33 @@ function createChip({ text, onClick }){
 
 function renderFixedChips(suggestedQuestions) {
   if (!chatChips) return;
-  // Xoá chip cố định cũ rồi render lại theo dữ liệu mới
-  chatChips.querySelectorAll('.topic-chip.fixed').forEach(el => el.remove());
-  const suggestions = Array.isArray(suggestedQuestions) ? suggestedQuestions : [];
-  const map = new Map(suggestions.map(q => [q.intent, q]));
-  CHIP_INTENTS.forEach(intent => {
-    const q = map.get(intent);
-    if (!q) return;
-    const label = q.label || q.intent;
-    const prompt = q.prompt || q.label || '';
-    createChip({ text: label, onClick: () => sendChat(prompt) });
+  // Xoá toàn bộ chips cũ (cố định và không cố định)
+  chatChips.querySelectorAll('.chip-btn').forEach(el => el.remove());
+  const lang = normalizeLang(window.soulmapData?.meta?.lang || window.currentLang || 'en');
+  let suggestions = [];
+  if (Array.isArray(suggestedQuestions)) {
+    suggestions = suggestedQuestions;
+  } else if (suggestedQuestions?.suggested_questions) {
+    suggestions = suggestedQuestions.suggested_questions;
+  } else if (suggestedQuestions && suggestedQuestions[lang]) {
+    suggestions = suggestedQuestions[lang];
+  }
+  // Fallback: nếu không có dữ liệu, dùng 5 gợi ý tiếng Anh chuẩn
+  if (!suggestions || suggestions.length === 0) {
+    const EN_FALLBACK = [
+      { label: 'Career direction', prompt: 'What career path fits my core numbers?' },
+      { label: '30-day growth plan', prompt: 'Give me a 30-day growth plan based on my chart.' },
+      { label: 'Missing numbers', prompt: 'Which numbers are missing in my chart and what do they mean?' },
+      { label: 'Personal year', prompt: 'What is my personal year and advice for it?' },
+      { label: 'Love & communication', prompt: 'How can I improve love and communication according to my numbers?' },
+    ];
+    suggestions = EN_FALLBACK;
+  }
+  // Chỉ render đúng 5 chip mới và đánh dấu là cố định
+  suggestions.slice(0, 5).forEach((q) => {
+    const label = q.label || q.intent || 'Question';
+    const promptText = q.prompt || q.label || '';
+    createChip({ text: label, onClick: () => sendChat(promptText) });
   });
 }
 
@@ -1226,7 +1306,10 @@ if (chatVoice) {
 }
 
 function openChat() {
-  if (chatBox) chatBox.style.display = 'block';
+  if (chatBox) {
+    chatBox.classList.remove('hidden');
+    chatBox.style.display = 'block';
+  }
   playSafe(audio.open);
 
   // Ensure conversation_id persists via sessionStorage
@@ -1300,6 +1383,9 @@ form.addEventListener('submit', async (e)=>{
   try { audio.open.pause(); } catch {}
   try { audio.loading.currentTime = 0; } catch {}
   playSafe(audio.loading);
+
+  // Reset chat để bắt đầu phiên mới, chips sẽ render lại sau khi có kết quả
+  resetChatForCalculation();
 
   const dob = `${yyyy}-${mm}-${dd}`;
 
@@ -1606,28 +1692,28 @@ async function composeSoulMapImage({
   ctx.fillStyle = 'white';
 
   // Name
-  ctx.font = "700 52px 'Playfair Display'";
+  ctx.font = "700 52px 'Playfair Display', Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif";
   h += 52 + 8;
   // Caption under name
-  ctx.font = '400 26px Inter';
+  ctx.font = '400 26px Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif';
   h += measureWrapHeightLang(ctx, caption, textMaxW, 36, lang) + 16;
 
   // Section 1
-  ctx.font = "700 40px 'Playfair Display'";
+  ctx.font = "700 40px 'Playfair Display', Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif";
   h += 40 + 18;
-  ctx.font = '400 28px Inter';
+  ctx.font = '400 28px Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif';
   h += measureWrapHeightLang(ctx, yourCore, textMaxW, 38, lang) + 18;
 
   // Section 2
-  ctx.font = "700 36px 'Playfair Display'";
+  ctx.font = "700 36px 'Playfair Display', Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif";
   h += 36 + 14;
-  ctx.font = '400 28px Inter';
+  ctx.font = '400 28px Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif';
   h += measureWrapHeightLang(ctx, mission, textMaxW, 38, lang) + 16;
 
   // Section 3
-  ctx.font = "700 36px 'Playfair Display'";
+  ctx.font = "700 36px 'Playfair Display', Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif";
   h += 36 + 14;
-  ctx.font = '400 28px Inter';
+  ctx.font = '400 28px Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif';
   h += measureWrapHeightLang(ctx, advice, textMaxW, 38, lang) + panelPadY;
 
   const panelH = Math.min(h, H * 0.35); // cap height to avoid covering too much
@@ -1665,40 +1751,40 @@ async function composeSoulMapImage({
   // Name
   ctx.textAlign = 'center';
   ctx.fillStyle = 'rgba(255,255,255,0.96)';
-  ctx.font = "700 52px 'Playfair Display'";
+  ctx.font = "700 52px 'Playfair Display', Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif";
   ctx.fillText(name, W / 2, y);
   y += 52 + 8;
 
   // Caption
-  ctx.font = '400 26px Inter';
+  ctx.font = '400 26px Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif';
   ctx.fillStyle = 'rgba(255,255,255,0.88)';
   y = wrapTextLang(ctx, caption, W / 2, y, textMaxW, 36, lang) + 16;
 
   // Core meaning
-  ctx.font = "700 40px 'Playfair Display'";
+  ctx.font = "700 40px 'Playfair Display', Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif";
   ctx.fillStyle = 'rgba(255,255,255,0.96)';
   ctx.fillText(lang === 'vi' ? 'Your Core Meaning' : 'Your Core Meaning', W / 2, y);
   y += 40 + 18;
-  ctx.font = '400 28px Inter';
+  ctx.font = '400 28px Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif';
   ctx.fillStyle = 'rgba(255,255,255,0.92)';
   y = wrapTextLang(ctx, yourCore, W / 2, y, textMaxW, 38, lang) + 18;
 
   // Life Mission
-  ctx.font = "700 36px 'Playfair Display'";
+  ctx.font = "700 36px 'Playfair Display', Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif";
   ctx.fillStyle = 'rgba(255,255,255,0.96)';
   ctx.fillText(lang === 'vi' ? 'Life Mission' : 'Life Mission', W / 2, y);
   y += 36 + 14;
-  ctx.font = '400 28px Inter';
+  ctx.font = '400 28px Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif';
   ctx.fillStyle = 'rgba(255,255,255,0.92)';
   y = wrapTextLang(ctx, mission, W / 2, y, textMaxW, 38, lang) + 16;
 
   // Personal Year (only render if advice exists)
   if (advice && advice.trim()) {
-    ctx.font = "700 36px 'Playfair Display'";
+    ctx.font = "700 36px 'Playfair Display', Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif";
     ctx.fillStyle = 'rgba(255,255,255,0.96)';
     ctx.fillText(lang === 'vi' ? 'Personal Year' : 'Personal Year', W / 2, y);
     y += 36 + 14;
-    ctx.font = '400 28px Inter';
+    ctx.font = '400 28px Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif';
     ctx.fillStyle = 'rgba(255,255,255,0.92)';
     y = wrapTextLang(ctx, advice, W / 2, y, textMaxW, 38, lang);
   }
@@ -1719,7 +1805,7 @@ async function composeSoulMapImage({
     // caption (optional)
     ctx.textAlign = 'left';
     ctx.textBaseline = 'top';
-    ctx.font = '300 14px Inter';
+    ctx.font = '300 14px Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif';
     ctx.fillStyle = 'rgba(232,215,164,0.85)'; // #E8D7A4 at 0.85 opacity
     ctx.fillText('Scan to reveal yours', qrX, qrY + qrSize + 8);
   } catch {}

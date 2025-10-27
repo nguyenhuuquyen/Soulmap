@@ -21,6 +21,15 @@ def add_cors_headers(resp):
 def index():
     return send_from_directory('.', 'index.html')
 
+# Serve favicon.ico using existing JPEG in image directory
+@app.route('/favicon.ico')
+def favicon():
+    try:
+        return send_from_directory('image', 'favicon.jpg')
+    except Exception:
+        # Fallback path if directory resolution differs
+        return send_from_directory('.', 'image/favicon.jpg')
+
 # Global visits counter initialized via environment variable VISITS_INIT (default 0)
 import threading
 _visits_lock = threading.Lock()
